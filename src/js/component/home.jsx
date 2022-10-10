@@ -1,24 +1,42 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, {useState} from "react";
+import TodoList from "./Todolist.jsx";
+import InputElem from "./InputElem.jsx";
+import ButtonElem from "./ButtonElem.jsx";
 
 //create your first component
-const Home = () => {
+const Home = (props) => {
+	const [taskValue, setTaskValue] = useState("");
+	const [counter, setCounter] = useState(1);
+	const [tasks, setTasks] = useState([]);
+
+	const addTask = () =>{
+		const auxTasks = [...tasks]
+		auxTasks.push({
+			id: counter,
+			text: taskValue,
+		})
+		console.log({ auxTasks })
+		setTasks(auxTasks)
+		setCounter(counter + 1)		
+		setTaskValue("")
+	}
+
+	const removeTask = (id) => {
+		const auxTasks = [...tasks]
+		const result = auxTasks.filter(((tasks) => tasks.id !== id));
+		setTasks(result);
+		console.log({ result })
+	}
+
+	
+
+
 	return (
 		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+			<h1>TODO LIST</h1>					
+			<InputElem value={taskValue} onChange={(e) => setTaskValue(e.target.value)}/>
+			<ButtonElem onClick={addTask} value="Añadir"/>
+			<TodoList tasks={tasks} removeTask={removeTask}/>
 		</div>
 	);
 };
